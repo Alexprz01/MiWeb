@@ -16,14 +16,21 @@
     $password = "password";
     $database = "demo";
     // Crear connexió
-    $conn = new mysqli($servername, $username, $password, $database);
-    // Comprovar connexió
-    if ($conn->connect_error) {
-        die(" Connexió fallida: " . htmlspecialchars($conn->connect_error));
+    try {
+        // Crear connexió PDO
+        $conn = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        echo "<p class='ok'>✅ Connexió establerta correctament amb la base de dades <strong>$dbname</strong>.</p>";
+
+        // Exemple de consulta
+        $stmt = $conn->query("SELECT NOW() AS hora_actual");
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        echo "<p>🕒 Hora actual del servidor MySQL: <strong>{$row['hora_actual']}</strong></p>";
+    } catch (PDOException $e) {
+        echo "<p class='error'>❌ Error de connexió: " . htmlspecialchars($e->getMessage()) . "</p>";
     }
-    echo "<p> Connexió correcta a la base de dades MySQL!</p>";
-    // Tancar connexió
-    $conn->close();
     ?>
 </body>
 
