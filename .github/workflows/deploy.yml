@@ -1,24 +1,19 @@
 name: Docker + Ngrok v3 Demo
-
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       # 1️⃣ Checkout del codi
       - name: Checkout repository
         uses: actions/checkout@v4
-
       # 2️⃣ Llançar contenidors amb Docker Compose
       - name: Run Docker containers
         run: docker compose up -d
-
       # 3️⃣ Instal·lar Ngrok v3
       - name: Install Ngrok v3
         run: |
@@ -27,30 +22,23 @@ jobs:
           sudo mv ngrok /usr/local/bin/ngrok
           sudo chmod +x /usr/local/bin/ngrok
           ngrok version
-
       # 4️⃣ Autenticar Ngrok amb el token secret
       - name: Authenticate Ngrok
         run: ngrok config add-authtoken ${{ secrets.NGROK_AUTHTOKEN }}
-
       # 5️⃣ Llançar el túnel Ngrok i capturar la URL pública
       - name: Start Ngrok tunnel
         id: ngrok
         run: |
           ngrok http 8080 --log=stdout > ngrok.log &
           NGROK_PID=$!
-
           sleep 5
-
           NGROK_URL=$(curl --silent http://127.0.0.1:4040/api/tunnels | \
             grep -oP '"public_url":"\Khttps://[^"]+')
-
           echo "NGROK_URL=$NGROK_URL" >> $GITHUB_ENV
           echo "🌐 Web accessible a: $NGROK_URL"
           echo "::notice title=URL pública::$NGROK_URL"
-
           sleep 600
           kill $NGROK_PID
-
       # 6️⃣ Neteja dels contenidors Docker al final
       - name: Stop Docker containers
         if: always()
