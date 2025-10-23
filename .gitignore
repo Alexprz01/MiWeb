@@ -1,0 +1,28 @@
+# Fitxers de sistema
+.DS_Store
+Thumbs.db
+
+# Fitxers de logs
+*.log
+
+# Fitxers d'entorn
+.env
+
+# Docker
+docker-compose.override.yml
+*.pid
+
+# phpMyAdmin config
+config.inc.php
+
+# Volums i dades
+db_data/
+*.sql
+
+# Editor config
+.vscode/
+.idea/
+
+# Altres
+*.zip
+*.tar.gz
