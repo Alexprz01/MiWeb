@@ -1,15 +1,30 @@
-<?php
-echo "<h1>Hola Mön </h1>";
+<!DOCTYPE html>
+<html>
 
-$host = 'db';
-$db   = 'demo';
-$user = 'user';
-$pass = 'password';
+<head>
+    <meta charset="UTF-8">
+    <title>Hola món amb PHP</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "<h2> Connexió correcta a la base de dades!</h2>";
-} catch (PDOException $e) {
-    echo "<h2> Error de connexió: " . $e->getMessage() . "</h2>";
-}
+<body>
+    <h1><?php echo "Hola món des de PHP i Docker!"; ?></h1>
+
+    <?php
+    $servername = "db";
+    $username = "user";
+    $password = "password";
+    $database = "demo";
+
+    $conn = new mysqli($servername, $username, $password, $database);
+
+    if ($conn->connect_error) {
+        die("❌ Connexió fallida: " . $conn->connect_error);
+    }
+    echo "✅ Connexió correcta a la base de dades MySQL!";
+    $conn->close();
+    ?>
+
+</body>
+
+</html>
